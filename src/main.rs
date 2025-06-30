@@ -19,7 +19,7 @@ type TodoList = Arc<Mutex<Vec<Todo>>>;
 
 #[tokio::main]
 async fn main() {
-    // Use PORT from environment (Railway requirement)
+  
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "3000".to_string())
         .parse::<u16>()
@@ -33,7 +33,7 @@ async fn main() {
         .route("/todos/:id", put(mark_done).delete(delete_todo))
         .with_state(todos);
 
-    // Bind to 0.0.0.0 for Railway compatibility
+   
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     println!("Server running on http://{}", addr);
 
