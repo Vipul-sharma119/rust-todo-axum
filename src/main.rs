@@ -19,6 +19,12 @@ type TodoList = Arc<Mutex<Vec<Todo>>>;
 
 #[tokio::main]
 async fn main() {
+    // Use PORT from environment (Railway requirement)
+    let port = std::env::var("PORT")
+        .unwrap_or_else(|_| "3000".to_string())
+        .parse::<u16>()
+        .expect("PORT must be a number");
+
     let todos: TodoList = Arc::new(Mutex::new(vec![]));
 
     let app = Router::new()
@@ -27,7 +33,8 @@ async fn main() {
         .route("/todos/:id", put(mark_done).delete(delete_todo))
         .with_state(todos);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    // Bind to 0.0.0.0 for Railway compatibility
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     println!("Server running on http://{}", addr);
 
     axum::Server::bind(&addr)
