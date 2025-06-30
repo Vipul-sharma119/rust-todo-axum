@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: rust-todo-axum
+    env: rust
+    buildCommand: "cargo build --release"
+    startCommand: "./target/release/rust-todo-axum"
+    autoDeploy: true
